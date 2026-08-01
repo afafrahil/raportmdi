@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beranda</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="loading" class="center-loading">Memeriksa sesi...</div>
+
+  <div id="app" style="display:none;">
+    <header>
+      <div class="brand">Portal<span>.</span></div>
+      <div class="user-box">
+        <span class="name">Halo, <span id="namaUser"></span></span>
+        <button id="btnLogout">Keluar</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="eyebrow">Beranda</div>
+      <h1>Selamat datang, <span id="namaUser2"></span>.</h1>
+      <p class="lead">
+        Anda berhasil masuk. Frontend ini dihosting statis di GitHub Pages dan
+        berkomunikasi dengan backend Google Apps Script yang terhubung ke
+        Google Spreadsheet sebagai database.
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="label">Username</div>
+          <div class="value" id="usernameVal"></div>
+        </div>
+        <div class="card">
+          <div class="label">Status</div>
+          <div class="value">Aktif</div>
+        </div>
+        <div class="card">
+          <div class="label">Sesi</div>
+          <div class="value">30 menit</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    const token = localStorage.getItem('token');
+
+    async function init(){
+      if (!token) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      try {
+        const res = await fetch(API_URL + '?action=checkSession&token=' + encodeURIComponent(token));
+        const data = await res.json();
+
+        if (!data.success) {
+          localStorage.clear();
+          window.location.href = 'index.html';
+          return;
+        }
+
+        document.getElementById('namaUser').textContent = data.nama;
+        document.getElementById('namaUser2').textContent = data.nama;
+        document.getElementById('usernameVal').textContent = data.username;
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+      } catch (err) {
+        document.getElementById('loading').textContent =
+          'Tidak bisa menghubungi server. Periksa API_URL di config.js.';
+      }
+    }
+
+    document.getElementById('btnLogout')?.addEventListener('click', async function(){
+      try {
+        await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'logout', token })
+        });
+      } finally {
+        localStorage.clear();
+        window.location.href = 'index.html';
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

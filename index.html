@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="login-wrap">
+    <div class="frame">
+      <div class="side">
+        <div class="side-top">
+          <div class="eyebrow">Area Anggota</div>
+          <div class="side-title">Masuk untuk melanjutkan ke beranda Anda.</div>
+        </div>
+        <div class="side-bottom">
+          <p>Frontend dihosting di GitHub Pages, data akun diverifikasi lewat API Google Apps Script yang terhubung ke Google Spreadsheet.</p>
+        </div>
+      </div>
+
+      <div class="form-panel">
+        <h1>Selamat datang kembali</h1>
+        <div class="sub">Masukkan username dan password Anda.</div>
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" autocomplete="username" required>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" autocomplete="current-password" required>
+          </div>
+          <button type="submit" id="btnLogin">Masuk</button>
+          <div class="msg" id="msg"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    // Kalau sudah ada sesi tersimpan & valid, langsung ke beranda
+    (async function checkExistingSession(){
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      try {
+        const res = await fetch(API_URL + '?action=checkSession&token=' + encodeURIComponent(token));
+        const data = await res.json();
+        if (data.success) window.location.href = 'beranda.html';
+      } catch (e) { /* diamkan, biarkan user login manual */ }
+    })();
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('btnLogin');
+      const msg = document.getElementById('msg');
+
+      msg.className = 'msg';
+      msg.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Memeriksa...';
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          // text/plain menghindari CORS preflight (OPTIONS) yang tidak
+          // ditangani Apps Script secara native
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'login', username, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('nama', data.nama);
+          localStorage.setItem('username', data.username);
+          msg.className = 'msg ok';
+          msg.textContent = 'Berhasil masuk, mengalihkan...';
+          window.location.href = 'beranda.html';
+        } else {
+          msg.className = 'msg error';
+          msg.textContent = data.message || 'Login gagal.';
+        }
+      } catch (err) {
+        msg.className = 'msg error';
+        msg.textContent = 'Tidak bisa menghubungi server. Periksa API_URL di config.js.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Masuk';
+      }
+    });
+  </script>
+</body>
+</html>
