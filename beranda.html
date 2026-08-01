@@ -3,94 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Beranda</title>
+  <title>Beranda - Raport MDI</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div id="loading" class="center-loading">Memeriksa sesi...</div>
+  <header>
+    <div class="brand">Raport MDI<span>.</span></div>
+    <div class="user-box">
+      <span class="name">Halo, <span id="namaUser">-</span></span>
+      <button id="btnLogout">Keluar</button>
+    </div>
+  </header>
 
-  <div id="app" style="display:none;">
-    <header>
-      <div class="brand">Portal<span>.</span></div>
-      <div class="user-box">
-        <span class="name">Halo, <span id="namaUser"></span></span>
-        <button id="btnLogout">Keluar</button>
+  <main>
+    <div class="eyebrow">Beranda</div>
+    <h1>Selamat datang, <span id="namaUser2">-</span>.</h1>
+    <p class="lead">Berikut ringkasan data dan nilai Anda.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="label">Username</div>
+        <div class="value" id="usernameVal">-</div>
       </div>
-    </header>
-
-    <main>
-      <div class="eyebrow">Beranda</div>
-      <h1>Selamat datang, <span id="namaUser2"></span>.</h1>
-      <p class="lead">
-        Anda berhasil masuk. Frontend ini dihosting statis di GitHub Pages dan
-        berkomunikasi dengan backend Google Apps Script yang terhubung ke
-        Google Spreadsheet sebagai database.
-      </p>
-
-      <div class="cards">
-        <div class="card">
-          <div class="label">Username</div>
-          <div class="value" id="usernameVal"></div>
-        </div>
-        <div class="card">
-          <div class="label">Status</div>
-          <div class="value">Aktif</div>
-        </div>
-        <div class="card">
-          <div class="label">Sesi</div>
-          <div class="value">30 menit</div>
-        </div>
+      <div class="card">
+        <div class="label">Kelas</div>
+        <div class="value" id="kelasVal">-</div>
       </div>
-    </main>
-  </div>
+      <div class="card">
+        <div class="label">Role</div>
+        <div class="value" id="roleVal">-</div>
+      </div>
+    </div>
+
+    <div id="tabelWrap">
+      <div class="center-loading" id="loadingNilai">Memuat data nilai...</div>
+    </div>
+  </main>
 
   <script src="config.js"></script>
   <script>
-    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('raport_username');
 
-    async function init(){
-      if (!token) {
-        window.location.href = 'index.html';
-        return;
-      }
+    if (!username) {
+      window.location.href = 'index.html';
+    }
 
+    document.getElementById('namaUser').textContent = localStorage.getItem('raport_nama') || username;
+    document.getElementById('namaUser2').textContent = localStorage.getItem('raport_nama') || username;
+    document.getElementById('usernameVal').textContent = username;
+    document.getElementById('kelasVal').textContent = localStorage.getItem('raport_kelas') || '-';
+    document.getElementById('roleVal').textContent = localStorage.getItem('raport_role') || '-';
+
+    document.getElementById('btnLogout').addEventListener('click', function(){
+      localStorage.clear();
+      window.location.href = 'index.html';
+    });
+
+    async function muatNilai(){
+      const wrap = document.getElementById('tabelWrap');
       try {
-        const res = await fetch(API_URL + '?action=checkSession&token=' + encodeURIComponent(token));
-        const data = await res.json();
+        const url = API_URL
+          + '?func=Cari'
+          + '&SH=' + encodeURIComponent(SHEET_NILAI)
+          + '&COLA=' + encodeURIComponent(username);
 
-        if (!data.success) {
-          localStorage.clear();
-          window.location.href = 'index.html';
+        const res = await fetch(url);
+        const text = (await res.text()).trim();
+
+        if (text === 'Not Found' || !text) {
+          wrap.innerHTML = '<div class="center-empty">Data nilai untuk username ini belum ditemukan di sheet "' + SHEET_NILAI + '".</div>';
           return;
         }
 
-        document.getElementById('namaUser').textContent = data.nama;
-        document.getElementById('namaUser2').textContent = data.nama;
-        document.getElementById('usernameVal').textContent = data.username;
+        const kolom = text.split('|');
+        let rows = '';
+        for (let i = 0; i < kolom.length; i++) {
+          const label = KOLOM_NILAI[i] || ('Kolom ' + (i + 1));
+          rows += '<tr><td>' + label + '</td><td>' + (kolom[i] ?? '') + '</td></tr>';
+        }
 
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
+        wrap.innerHTML =
+          '<table class="nilai"><thead><tr><th>Keterangan</th><th>Nilai</th></tr></thead>' +
+          '<tbody>' + rows + '</tbody></table>';
       } catch (err) {
-        document.getElementById('loading').textContent =
-          'Tidak bisa menghubungi server. Periksa API_URL di config.js.';
+        wrap.innerHTML = '<div class="center-empty">Tidak bisa memuat data nilai. Periksa API_URL / koneksi.</div>';
       }
     }
 
-    document.getElementById('btnLogout')?.addEventListener('click', async function(){
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'logout', token })
-        });
-      } finally {
-        localStorage.clear();
-        window.location.href = 'index.html';
-      }
-    });
-
-    init();
+    if (username) muatNilai();
   </script>
 </body>
 </html>
