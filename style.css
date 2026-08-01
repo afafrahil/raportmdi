@@ -17,7 +17,7 @@ body{
   min-height:100vh;
 }
 
-/* ---------- Login page ---------- */
+/* ---------- Login ---------- */
 .login-wrap{
   min-height:100vh;
   display:flex;
@@ -56,167 +56,75 @@ body{
 }
 .side-top, .side-bottom{ position:relative; z-index:1; }
 .eyebrow{
-  font-size:12px;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  color:var(--amber);
-  font-weight:600;
+  font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--amber); font-weight:600;
 }
 .side-title{
-  font-family:'Fraunces', serif;
-  font-size:32px;
-  line-height:1.25;
-  margin-top:14px;
-  max-width:280px;
+  font-family:'Fraunces', serif; font-size:32px; line-height:1.25;
+  margin-top:14px; max-width:280px;
 }
-.side-bottom p{
-  font-size:13px;
-  color:#B9C0CE;
-  line-height:1.6;
-  max-width:260px;
-}
-.form-panel{
-  flex:1;
-  padding:56px 48px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.form-panel h1{
-  font-family:'Fraunces', serif;
-  font-size:26px;
-  font-weight:600;
-  margin-bottom:6px;
-}
-.form-panel .sub{
-  font-size:14px;
-  color:#6B7280;
-  margin-bottom:32px;
-}
+.side-bottom p{ font-size:13px; color:#B9C0CE; line-height:1.6; max-width:260px; }
+.form-panel{ flex:1; padding:56px 48px; display:flex; flex-direction:column; justify-content:center; }
+.form-panel h1{ font-family:'Fraunces', serif; font-size:26px; font-weight:600; margin-bottom:6px; }
+.form-panel .sub{ font-size:14px; color:#6B7280; margin-bottom:32px; }
 label{
-  display:block;
-  font-size:12px;
-  font-weight:600;
-  letter-spacing:0.04em;
-  text-transform:uppercase;
-  color:var(--ink-soft);
-  margin-bottom:6px;
+  display:block; font-size:12px; font-weight:600; letter-spacing:0.04em;
+  text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px;
 }
 .field{ margin-bottom:20px; }
 input[type="text"], input[type="password"]{
-  width:100%;
-  padding:12px 14px;
-  border:1.5px solid var(--line);
-  background:var(--paper);
-  font-size:14px;
-  font-family:inherit;
-  color:var(--ink);
+  width:100%; padding:12px 14px; border:1.5px solid var(--line);
+  background:var(--paper); font-size:14px; font-family:inherit; color:var(--ink);
   transition:border-color .15s ease;
 }
 input:focus{ outline:none; border-color:var(--teal); }
 button{
-  width:100%;
-  padding:13px;
-  background:var(--ink);
-  color:var(--paper);
-  border:none;
-  font-family:'Inter', sans-serif;
-  font-size:14px;
-  font-weight:600;
-  letter-spacing:0.02em;
-  cursor:pointer;
-  margin-top:8px;
-  transition:background .15s ease;
+  width:100%; padding:13px; background:var(--ink); color:var(--paper); border:none;
+  font-family:'Inter', sans-serif; font-size:14px; font-weight:600; letter-spacing:0.02em;
+  cursor:pointer; margin-top:8px; transition:background .15s ease;
 }
 button:hover{ background:var(--ink-soft); }
 button:disabled{ opacity:0.6; cursor:not-allowed; }
-.msg{
-  margin-top:16px;
-  font-size:13px;
-  padding:10px 12px;
-  display:none;
-}
+.msg{ margin-top:16px; font-size:13px; padding:10px 12px; display:none; }
 .msg.error{ display:block; background:#FBEAE3; color:var(--error); border-left:3px solid var(--error); }
 .msg.ok{ display:block; background:#E7F1EF; color:var(--teal); border-left:3px solid var(--teal); }
+@media (max-width:720px){ .side{ display:none; } .form-panel{ padding:40px 28px; } }
 
-@media (max-width:720px){
-  .side{ display:none; }
-  .form-panel{ padding:40px 28px; }
-}
-
-/* ---------- Beranda page ---------- */
+/* ---------- Beranda ---------- */
 header{
-  background:var(--ink);
-  color:var(--paper);
-  padding:20px 40px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  background:var(--ink); color:var(--paper); padding:20px 40px;
+  display:flex; align-items:center; justify-content:space-between;
 }
 header .brand{ font-family:'Fraunces', serif; font-size:20px; }
 header .brand span{ color:var(--amber); }
 .user-box{ display:flex; align-items:center; gap:14px; }
 .user-box .name{ font-size:14px; color:#D9DEE6; }
 #btnLogout{
-  background:transparent;
-  border:1.5px solid #4A5670;
-  color:var(--paper);
-  padding:8px 16px;
-  font-size:13px;
-  font-weight:600;
-  cursor:pointer;
-  transition:all .15s ease;
+  background:transparent; border:1.5px solid #4A5670; color:var(--paper);
+  padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s ease;
 }
 #btnLogout:hover{ background:var(--paper); color:var(--ink); }
 
-main{
-  max-width:900px;
-  margin:0 auto;
-  padding:64px 40px;
-}
-h1{
-  font-family:'Fraunces', serif;
-  font-size:36px;
-  margin-top:12px;
-  margin-bottom:14px;
-}
-p.lead{
-  font-size:15px;
-  color:#5A6072;
-  max-width:560px;
-  line-height:1.7;
-  margin-bottom:40px;
-}
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
-  gap:16px;
-}
-.card{
-  background:#fff;
-  border:1px solid var(--line);
-  padding:24px;
-}
-.card .label{
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:0.06em;
-  color:#8A8F9C;
-  margin-bottom:8px;
-}
-.card .value{ font-family:'Fraunces', serif; font-size:22px; }
+main{ max-width:960px; margin:0 auto; padding:56px 40px; }
+h1{ font-family:'Fraunces', serif; font-size:32px; margin-top:10px; margin-bottom:8px; }
+p.lead{ font-size:15px; color:#5A6072; max-width:560px; line-height:1.7; margin-bottom:32px; }
 
-.center-loading{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:14px;
-  color:#6B7280;
-}
+.cards{ display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom:40px; }
+.card{ background:#fff; border:1px solid var(--line); padding:20px; }
+.card .label{ font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:#8A8F9C; margin-bottom:6px; }
+.card .value{ font-family:'Fraunces', serif; font-size:20px; }
 
-@media (max-width:600px){
-  header{ padding:16px 20px; }
-  main{ padding:40px 20px; }
-  h1{ font-size:28px; }
+table.nilai{ width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); }
+table.nilai th, table.nilai td{
+  text-align:left; padding:12px 16px; border-bottom:1px solid var(--line); font-size:14px;
 }
+table.nilai th{
+  background:var(--paper); font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);
+}
+table.nilai tr:last-child td{ border-bottom:none; }
+
+.center-loading, .center-empty{
+  min-height:60vh; display:flex; align-items:center; justify-content:center;
+  font-size:14px; color:#6B7280; text-align:center; padding:20px;
+}
+@media (max-width:600px){ header{ padding:16px 20px; } main{ padding:36px 20px; } h1{ font-size:26px; } }
