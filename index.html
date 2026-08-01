@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login</title>
+  <title>Login - Raport MDI</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,11 +12,11 @@
     <div class="frame">
       <div class="side">
         <div class="side-top">
-          <div class="eyebrow">Area Anggota</div>
-          <div class="side-title">Masuk untuk melanjutkan ke beranda Anda.</div>
+          <div class="eyebrow">Raport MDI</div>
+          <div class="side-title">Masuk untuk melihat nilai Anda.</div>
         </div>
         <div class="side-bottom">
-          <p>Frontend dihosting di GitHub Pages, data akun diverifikasi lewat API Google Apps Script yang terhubung ke Google Spreadsheet.</p>
+          <p>Data login & nilai diambil langsung dari Google Spreadsheet melalui Google Apps Script.</p>
         </div>
       </div>
 
@@ -42,20 +42,14 @@
 
   <script src="config.js"></script>
   <script>
-    // Kalau sudah ada sesi tersimpan & valid, langsung ke beranda
-    (async function checkExistingSession(){
-      const token = localStorage.getItem('token');
-      if (!token) return;
-      try {
-        const res = await fetch(API_URL + '?action=checkSession&token=' + encodeURIComponent(token));
-        const data = await res.json();
-        if (data.success) window.location.href = 'beranda.html';
-      } catch (e) { /* diamkan, biarkan user login manual */ }
-    })();
+    // Kalau sudah ada data login tersimpan, langsung ke beranda
+    if (localStorage.getItem('raport_username')) {
+      window.location.href = 'beranda.html';
+    }
 
     document.getElementById('loginForm').addEventListener('submit', async function(e){
       e.preventDefault();
-      const username = document.getElementById('username').value;
+      const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
       const btn = document.getElementById('btnLogin');
       const msg = document.getElementById('msg');
@@ -66,25 +60,29 @@
       btn.textContent = 'Memeriksa...';
 
       try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          // text/plain menghindari CORS preflight (OPTIONS) yang tidak
-          // ditangani Apps Script secara native
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'login', username, password })
-        });
-        const data = await res.json();
+        const url = API_URL
+          + '?func=LOGIN'
+          + '&SH=' + encodeURIComponent(SHEET_LOGIN)
+          + '&USERNAME=' + encodeURIComponent(username)
+          + '&PASSWORD=' + encodeURIComponent(password);
 
-        if (data.success) {
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('nama', data.nama);
-          localStorage.setItem('username', data.username);
+        const res = await fetch(url);
+        const text = await res.text();
+        const parts = text.trim().split('|');
+
+        if (parts[0] === 'SUKSES') {
+          // format: SUKSES|username|password|nama|kelas|role
+          localStorage.setItem('raport_username', parts[1] || username);
+          localStorage.setItem('raport_nama', parts[3] || username);
+          localStorage.setItem('raport_kelas', parts[4] || '-');
+          localStorage.setItem('raport_role', parts[5] || '-');
+
           msg.className = 'msg ok';
           msg.textContent = 'Berhasil masuk, mengalihkan...';
           window.location.href = 'beranda.html';
         } else {
           msg.className = 'msg error';
-          msg.textContent = data.message || 'Login gagal.';
+          msg.textContent = 'Username atau password salah.';
         }
       } catch (err) {
         msg.className = 'msg error';
