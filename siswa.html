@@ -48,7 +48,7 @@
       apiCall('getInfoLembaga').then(res => {
         if (res.success) {
           document.getElementById('infoTahunSemester').textContent =
-            'Tahun Ajaran ' + res.tahunAjaran + ' — Semester ' + res.semester;
+            res.tahunAjaran + ' ' + res.semester;
         }
       });
 
