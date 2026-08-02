@@ -8,7 +8,10 @@
 </head>
 <body>
   <div class="topbar">
-    <h2>Nilai Akademik</h2>
+    <div>
+      <h2>Nilai Akademik</h2>
+      <div id="infoTahunSemester" style="font-size:12px; opacity:0.85; margin-top:2px;"></div>
+    </div>
     <div style="display:flex; align-items:center; gap:14px;">
       <span class="user-info" id="userInfo"></span>
       <button onclick="logout()">Keluar</button>
@@ -41,6 +44,13 @@
       const user = requireLogin('Siswa');
       if (!user) return;
       document.getElementById('userInfo').textContent = user.nama + ' (' + user.username + ')';
+
+      apiCall('getInfoLembaga').then(res => {
+        if (res.success) {
+          document.getElementById('infoTahunSemester').textContent =
+            'Tahun Ajaran ' + res.tahunAjaran + ' — Semester ' + res.semester;
+        }
+      });
 
       const res = await apiCall('getNilaiSiswa', { nis: user.username });
       document.getElementById('loading').style.display = 'none';
