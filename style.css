@@ -156,16 +156,13 @@ td input[type="number"] {
 
 .loading { color: #888; font-size: 13px; padding: 10px 0; }
 
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 @media (max-width: 600px) {
-  table, thead, tbody, th, td, tr { display: block; }
-  th { display: none; }
-  td { border: none; border-bottom: 1px solid #eee; position: relative; padding-left: 45%; }
-  td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 10px;
-    font-weight: 600;
-    color: #555;
-  }
-  tr { margin-bottom: 12px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 6px 0; }
+  table { font-size: 12px; }
+  th, td { padding: 6px 8px; white-space: nowrap; }
+  td input[type="number"] { width: 55px; padding: 5px 6px; }
 }
