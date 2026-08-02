@@ -150,6 +150,7 @@ td input[type="number"] {
   margin-bottom: 0;
   width: 70px;
   padding: 6px 8px;
+  text-align: center;
 }
 
 /* Hilangkan tombol panah tambah/kurang pada input angka */
