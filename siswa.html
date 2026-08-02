@@ -22,36 +22,24 @@
     <div class="panel">
       <h3 id="judulPeriode">Rincian Nilai</h3>
       <div id="loading" class="loading">Memuat nilai...</div>
-
-      <div id="tabWrap" class="tab-wrap" style="display:none;">
-        <div class="tab-nav">
-          <button type="button" class="tab-btn active" data-tab="akademik">AKADEMIK</button>
-          <button type="button" class="tab-btn" data-tab="sikap">SIKAP</button>
-          <button type="button" class="tab-btn" data-tab="kehadiran">KEHADIRAN</button>
-        </div>
-
-        <div class="table-scroll tab-panel active" id="tab-akademik">
-          <table>
-            <thead><tr><th>Mata Pelajaran</th><th>Pengetahuan</th><th>Keterampilan</th></tr></thead>
-            <tbody id="tbodyAkademik"></tbody>
-          </table>
-        </div>
-
-        <div class="table-scroll tab-panel" id="tab-sikap">
-          <table>
-            <thead><tr><th>Mata Pelajaran</th><th>Spiritual</th><th>Sosial</th></tr></thead>
-            <tbody id="tbodySikap"></tbody>
-          </table>
-        </div>
-
-        <div class="table-scroll tab-panel" id="tab-kehadiran">
-          <table>
-            <thead><tr><th>Mata Pelajaran</th><th>Hadir</th><th>Sakit</th><th>Izin</th><th>Alfa</th></tr></thead>
-            <tbody id="tbodyKehadiran"></tbody>
-          </table>
-        </div>
+      <div class="table-scroll">
+      <table id="tabelNilai" style="display:none;">
+        <thead>
+          <tr>
+            <th>Mata Pelajaran</th>
+            <th>Pengetahuan</th>
+            <th>Keterampilan</th>
+            <th>Spiritual</th>
+            <th>Sosial</th>
+            <th>Hadir</th>
+            <th>Sakit</th>
+            <th>Izin</th>
+            <th>Alfa</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyNilai"></tbody>
+      </table>
       </div>
-
       <div id="emptyMsg" class="loading" style="display:none;">Belum ada nilai yang diinput untuk periode ini.</div>
     </div>
   </div>
@@ -85,38 +73,25 @@
         return;
       }
 
-      const tbodyAkademik = document.getElementById('tbodyAkademik');
-      const tbodySikap = document.getElementById('tbodySikap');
-      const tbodyKehadiran = document.getElementById('tbodyKehadiran');
-      tbodyAkademik.innerHTML = '';
-      tbodySikap.innerHTML = '';
-      tbodyKehadiran.innerHTML = '';
-
+      const tbody = document.getElementById('tbodyNilai');
+      tbody.innerHTML = '';
       res.data.forEach(n => {
-        const trA = document.createElement('tr');
-        trA.innerHTML = `<td>${n.mapel}</td><td>${n.pengetahuan}</td><td>${n.keterampilan}</td>`;
-        tbodyAkademik.appendChild(trA);
-
-        const trS = document.createElement('tr');
-        trS.innerHTML = `<td>${n.mapel}</td><td>${n.spiritual}</td><td>${n.sosial}</td>`;
-        tbodySikap.appendChild(trS);
-
-        const trK = document.createElement('tr');
-        trK.innerHTML = `<td>${n.mapel}</td><td>${n.hadir}</td><td>${n.sakit}</td><td>${n.izin}</td><td>${n.alfa}</td>`;
-        tbodyKehadiran.appendChild(trK);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td data-label="Mapel">${n.mapel}</td>
+          <td data-label="Pengetahuan">${n.pengetahuan}</td>
+          <td data-label="Keterampilan">${n.keterampilan}</td>
+          <td data-label="Spiritual">${n.spiritual}</td>
+          <td data-label="Sosial">${n.sosial}</td>
+          <td data-label="Hadir">${n.hadir}</td>
+          <td data-label="Sakit">${n.sakit}</td>
+          <td data-label="Izin">${n.izin}</td>
+          <td data-label="Alfa">${n.alfa}</td>
+        `;
+        tbody.appendChild(tr);
       });
-
-      document.getElementById('tabWrap').style.display = 'block';
+      document.getElementById('tabelNilai').style.display = 'table';
     }
-
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-      });
-    });
 
     init();
   </script>
