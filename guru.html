@@ -29,25 +29,42 @@
     <div class="panel" id="panelNilai" style="display:none;">
       <h3 id="judulTabel">Daftar Siswa</h3>
       <div id="loadingSiswa" class="loading">Memuat siswa...</div>
-      <div class="table-scroll">
-      <table id="tabelNilai" style="display:none;">
-        <thead>
-          <tr>
-            <th>NIS</th>
-            <th>Nama Siswa</th>
-            <th>Pengetahuan</th>
-            <th>Keterampilan</th>
-            <th>Spiritual</th>
-            <th>Sosial</th>
-            <th>Hadir</th>
-            <th>Sakit</th>
-            <th>Izin</th>
-            <th>Alfa</th>
-          </tr>
-        </thead>
-        <tbody id="tbodyNilai"></tbody>
-      </table>
+
+      <div id="tabWrap" class="tab-wrap" style="display:none;">
+        <div class="tab-nav">
+          <button type="button" class="tab-btn active" data-tab="akademik">AKADEMIK</button>
+          <button type="button" class="tab-btn" data-tab="sikap">SIKAP</button>
+          <button type="button" class="tab-btn" data-tab="kehadiran">KEHADIRAN</button>
+        </div>
+
+        <div class="table-scroll tab-panel active" id="tab-akademik">
+          <table>
+            <thead>
+              <tr><th>NIS</th><th>Nama Siswa</th><th>Pengetahuan</th><th>Keterampilan</th></tr>
+            </thead>
+            <tbody id="tbodyAkademik"></tbody>
+          </table>
+        </div>
+
+        <div class="table-scroll tab-panel" id="tab-sikap">
+          <table>
+            <thead>
+              <tr><th>NIS</th><th>Nama Siswa</th><th>Spiritual</th><th>Sosial</th></tr>
+            </thead>
+            <tbody id="tbodySikap"></tbody>
+          </table>
+        </div>
+
+        <div class="table-scroll tab-panel" id="tab-kehadiran">
+          <table>
+            <thead>
+              <tr><th>NIS</th><th>Nama Siswa</th><th>Hadir</th><th>Sakit</th><th>Izin</th><th>Alfa</th></tr>
+            </thead>
+            <tbody id="tbodyKehadiran"></tbody>
+          </table>
+        </div>
       </div>
+
       <div class="save-bar">
         <div id="saveMsg" class="success-msg" style="align-self:center;"></div>
         <button id="btnSimpan" onclick="simpanNilai()">Simpan Nilai</button>
@@ -96,16 +113,15 @@
     async function onAssignChange() {
       const idx = document.getElementById('selAssign').value;
       const panel = document.getElementById('panelNilai');
-      const tabel = document.getElementById('tabelNilai');
+      const tabWrap = document.getElementById('tabWrap');
       const loading = document.getElementById('loadingSiswa');
-      const tbody = document.getElementById('tbodyNilai');
       document.getElementById('saveMsg').textContent = '';
 
       if (idx === '') { panel.style.display = 'none'; return; }
 
       const a = assignments[idx];
       panel.style.display = 'block';
-      tabel.style.display = 'none';
+      tabWrap.style.display = 'none';
       loading.style.display = 'block';
       document.getElementById('judulTabel').textContent = 'Nilai ' + a.kelas + ' - ' + a.mapel;
 
@@ -120,26 +136,55 @@
       siswaList = siswaRes.data;
       const existingNilai = nilaiRes.success ? nilaiRes.data : {};
 
-      tbody.innerHTML = '';
+      const tbodyAkademik = document.getElementById('tbodyAkademik');
+      const tbodySikap = document.getElementById('tbodySikap');
+      const tbodyKehadiran = document.getElementById('tbodyKehadiran');
+      tbodyAkademik.innerHTML = '';
+      tbodySikap.innerHTML = '';
+      tbodyKehadiran.innerHTML = '';
+
       siswaList.forEach(s => {
         const n = existingNilai[s.nis] || {};
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td data-label="NIS">${s.nis}</td>
-          <td data-label="Nama">${s.nama}</td>
-          <td data-label="Pengetahuan"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="pengetahuan" value="${n.pengetahuan ?? ''}"></td>
-          <td data-label="Keterampilan"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="keterampilan" value="${n.keterampilan ?? ''}"></td>
-          <td data-label="Spiritual"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="spiritual" value="${n.spiritual ?? ''}"></td>
-          <td data-label="Sosial"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="sosial" value="${n.sosial ?? ''}"></td>
-          <td data-label="Hadir"><input type="number" min="0" data-nis="${s.nis}" data-field="hadir" value="${n.hadir ?? ''}" style="width:55px;"></td>
-          <td data-label="Sakit"><input type="number" min="0" data-nis="${s.nis}" data-field="sakit" value="${n.sakit ?? ''}" style="width:55px;"></td>
-          <td data-label="Izin"><input type="number" min="0" data-nis="${s.nis}" data-field="izin" value="${n.izin ?? ''}" style="width:55px;"></td>
-          <td data-label="Alfa"><input type="number" min="0" data-nis="${s.nis}" data-field="alfa" value="${n.alfa ?? ''}" style="width:55px;"></td>
+        const inp = (field, val, max) => `<input type="number" min="0" ${max ? 'max="' + max + '"' : ''} data-nis="${s.nis}" data-field="${field}" value="${val ?? ''}">`;
+
+        const trA = document.createElement('tr');
+        trA.innerHTML = `
+          <td>${s.nis}</td><td>${s.nama}</td>
+          <td>${inp('pengetahuan', n.pengetahuan, 100)}</td>
+          <td>${inp('keterampilan', n.keterampilan, 100)}</td>
         `;
-        tbody.appendChild(tr);
+        tbodyAkademik.appendChild(trA);
+
+        const trS = document.createElement('tr');
+        trS.innerHTML = `
+          <td>${s.nis}</td><td>${s.nama}</td>
+          <td>${inp('spiritual', n.spiritual, 100)}</td>
+          <td>${inp('sosial', n.sosial, 100)}</td>
+        `;
+        tbodySikap.appendChild(trS);
+
+        const trK = document.createElement('tr');
+        trK.innerHTML = `
+          <td>${s.nis}</td><td>${s.nama}</td>
+          <td>${inp('hadir', n.hadir)}</td>
+          <td>${inp('sakit', n.sakit)}</td>
+          <td>${inp('izin', n.izin)}</td>
+          <td>${inp('alfa', n.alfa)}</td>
+        `;
+        tbodyKehadiran.appendChild(trK);
       });
-      tabel.style.display = 'table';
+
+      tabWrap.style.display = 'block';
     }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
 
     async function simpanNilai() {
       const idx = document.getElementById('selAssign').value;
