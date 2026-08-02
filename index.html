@@ -9,8 +9,11 @@
 <body>
   <div class="center-wrap">
     <div class="card">
-      <h1>Aplikasi Penilaian</h1>
-      <p class="subtitle">Ma'had Darul Ihsan</p>
+      <div id="lembagaInfo" style="text-align:center; margin-bottom:20px;">
+        <img id="logoLembaga" src="" alt="Logo" style="width:70px; height:70px; object-fit:contain; display:none; margin:0 auto 10px;">
+        <h1 id="namaLembaga">Aplikasi Penilaian</h1>
+        <p class="subtitle" id="infoTahunSemester">Memuat data lembaga...</p>
+      </div>
 
       <div id="errorMsg" class="error-msg"></div>
 
@@ -28,6 +31,25 @@
 
   <script src="app.js"></script>
   <script>
+    async function loadInfoLembaga() {
+      try {
+        const res = await apiCall('getInfoLembaga');
+        if (res.success) {
+          document.getElementById('namaLembaga').textContent = res.namaLembaga;
+          document.getElementById('infoTahunSemester').textContent =
+            'Tahun Ajaran ' + res.tahunAjaran + ' — Semester ' + res.semester;
+          if (res.logoUrl) {
+            const img = document.getElementById('logoLembaga');
+            img.src = res.logoUrl;
+            img.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        console.error('Gagal memuat info lembaga', err);
+      }
+    }
+    loadInfoLembaga();
+
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const username = document.getElementById('username').value.trim();
