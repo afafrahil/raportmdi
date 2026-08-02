@@ -34,7 +34,7 @@
         <thead>
           <tr>
             <th>NIS</th>
-            <th>Nama Siswa</th>
+            <th class="col-nama">Nama Siswa</th>
             <th>Pengetahuan</th>
             <th>Keterampilan</th>
             <th>Spiritual</th>
@@ -126,7 +126,7 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td data-label="NIS">${s.nis}</td>
-          <td data-label="Nama">${s.nama}</td>
+          <td data-label="Nama" class="col-nama">${s.nama}</td>
           <td data-label="Pengetahuan"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="pengetahuan" value="${n.pengetahuan ?? ''}"></td>
           <td data-label="Keterampilan"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="keterampilan" value="${n.keterampilan ?? ''}"></td>
           <td data-label="Spiritual"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="spiritual" value="${n.spiritual ?? ''}"></td>
