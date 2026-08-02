@@ -131,12 +131,19 @@ table {
 th, td {
   border: 1px solid #e0e0e0;
   padding: 8px 10px;
-  text-align: left;
+  text-align: center;
 }
 
 th {
   background: #eef4f2;
   color: #1a3c34;
+  text-align: center;
+}
+
+/* Kolom nama (Nama Siswa / Mata Pelajaran): rata kiri, tidak wrap */
+.col-nama {
+  text-align: left;
+  white-space: nowrap;
 }
 
 td input[type="number"] {
