@@ -38,6 +38,10 @@
             <th>Keterampilan</th>
             <th>Spiritual</th>
             <th>Sosial</th>
+            <th>Hadir</th>
+            <th>Sakit</th>
+            <th>Izin</th>
+            <th>Alfa</th>
           </tr>
         </thead>
         <tbody id="tbodyNilai"></tbody>
@@ -125,6 +129,10 @@
           <td data-label="Keterampilan"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="keterampilan" value="${n.keterampilan ?? ''}"></td>
           <td data-label="Spiritual"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="spiritual" value="${n.spiritual ?? ''}"></td>
           <td data-label="Sosial"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="sosial" value="${n.sosial ?? ''}"></td>
+          <td data-label="Hadir"><input type="number" min="0" data-nis="${s.nis}" data-field="hadir" value="${n.hadir ?? ''}" style="width:55px;"></td>
+          <td data-label="Sakit"><input type="number" min="0" data-nis="${s.nis}" data-field="sakit" value="${n.sakit ?? ''}" style="width:55px;"></td>
+          <td data-label="Izin"><input type="number" min="0" data-nis="${s.nis}" data-field="izin" value="${n.izin ?? ''}" style="width:55px;"></td>
+          <td data-label="Alfa"><input type="number" min="0" data-nis="${s.nis}" data-field="alfa" value="${n.alfa ?? ''}" style="width:55px;"></td>
         `;
         tbody.appendChild(tr);
       });
@@ -149,7 +157,11 @@
           pengetahuan: get('pengetahuan'),
           keterampilan: get('keterampilan'),
           spiritual: get('spiritual'),
-          sosial: get('sosial')
+          sosial: get('sosial'),
+          hadir: get('hadir'),
+          sakit: get('sakit'),
+          izin: get('izin'),
+          alfa: get('alfa')
         };
       });
 
