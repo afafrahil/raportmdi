@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nilai Saya</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topbar">
+    <h2>Nilai Akademik</h2>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="user-info" id="userInfo"></span>
+      <button onclick="logout()">Keluar</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="panel">
+      <h3 id="judulPeriode">Rincian Nilai</h3>
+      <div id="loading" class="loading">Memuat nilai...</div>
+      <table id="tabelNilai" style="display:none;">
+        <thead>
+          <tr>
+            <th>Mata Pelajaran</th>
+            <th>Pengetahuan</th>
+            <th>Keterampilan</th>
+            <th>Spiritual</th>
+            <th>Sosial</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyNilai"></tbody>
+      </table>
+      <div id="emptyMsg" class="loading" style="display:none;">Belum ada nilai yang diinput untuk periode ini.</div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    async function init() {
+      const user = requireLogin('Siswa');
+      if (!user) return;
+      document.getElementById('userInfo').textContent = user.nama + ' (' + user.username + ')';
+
+      const res = await apiCall('getNilaiSiswa', { nis: user.username });
+      document.getElementById('loading').style.display = 'none';
+
+      if (!res.success) {
+        alert(res.message);
+        return;
+      }
+
+      document.getElementById('judulPeriode').textContent = 'Rincian Nilai - Periode ' + res.periode;
+
+      if (!res.data.length) {
+        document.getElementById('emptyMsg').style.display = 'block';
+        return;
+      }
+
+      const tbody = document.getElementById('tbodyNilai');
+      tbody.innerHTML = '';
+      res.data.forEach(n => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td data-label="Mapel">${n.mapel}</td>
+          <td data-label="Pengetahuan">${n.pengetahuan}</td>
+          <td data-label="Keterampilan">${n.keterampilan}</td>
+          <td data-label="Spiritual">${n.spiritual}</td>
+          <td data-label="Sosial">${n.sosial}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('tabelNilai').style.display = 'table';
+    }
+
+    init();
+  </script>
+</body>
+</html>
