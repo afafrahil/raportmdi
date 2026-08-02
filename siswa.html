@@ -26,7 +26,7 @@
       <table id="tabelNilai" style="display:none;">
         <thead>
           <tr>
-            <th>Mata Pelajaran</th>
+            <th class="col-nama">Mata Pelajaran</th>
             <th>Pengetahuan</th>
             <th>Keterampilan</th>
             <th>Spiritual</th>
@@ -78,7 +78,7 @@
       res.data.forEach(n => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td data-label="Mapel">${n.mapel}</td>
+          <td data-label="Mapel" class="col-nama">${n.mapel}</td>
           <td data-label="Pengetahuan">${n.pengetahuan}</td>
           <td data-label="Keterampilan">${n.keterampilan}</td>
           <td data-label="Spiritual">${n.spiritual}</td>
