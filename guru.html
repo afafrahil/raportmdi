@@ -8,7 +8,10 @@
 </head>
 <body>
   <div class="topbar">
-    <h2>Input Nilai Siswa</h2>
+    <div>
+      <h2>Input Nilai Siswa</h2>
+      <div id="infoTahunSemester" style="font-size:12px; opacity:0.85; margin-top:2px;"></div>
+    </div>
     <div style="display:flex; align-items:center; gap:14px;">
       <span class="user-info" id="userInfo"></span>
       <button onclick="logout()">Keluar</button>
@@ -56,6 +59,13 @@
       user = requireLogin('Guru');
       if (!user) return;
       document.getElementById('userInfo').textContent = user.nama;
+
+      apiCall('getInfoLembaga').then(res => {
+        if (res.success) {
+          document.getElementById('infoTahunSemester').textContent =
+            'Tahun Ajaran ' + res.tahunAjaran + ' — Semester ' + res.semester;
+        }
+      });
 
       document.getElementById('loadingAssign').style.display = 'block';
       const res = await apiCall('getGuruAssignments', { namaGuru: user.nama });
