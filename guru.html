@@ -29,24 +29,20 @@
     <div class="panel" id="panelNilai" style="display:none;">
       <h3 id="judulTabel">Daftar Siswa</h3>
       <div id="loadingSiswa" class="loading">Memuat siswa...</div>
-      <div class="table-scroll">
-      <table id="tabelNilai" style="display:none;">
-        <thead>
-          <tr>
-            <th class="col-nis">NIS</th>
-            <th class="col-nama sticky">Nama Siswa</th>
-            <th>Pengetahuan</th>
-            <th>Keterampilan</th>
-            <th>Spiritual</th>
-            <th>Sosial</th>
-            <th>Hadir</th>
-            <th>Sakit</th>
-            <th>Izin</th>
-            <th>Alfa</th>
-          </tr>
-        </thead>
-        <tbody id="tbodyNilai"></tbody>
-      </table>
+      <div class="siswa-list" id="siswaList" style="display:none;">
+        <div class="siswa-row header-row">
+          <div class="f-nis">NIS</div>
+          <div class="f-nama">Nama Siswa</div>
+          <div class="f-peng">Pengetahuan</div>
+          <div class="f-ket">Keterampilan</div>
+          <div class="f-spi">Spiritual</div>
+          <div class="f-sos">Sosial</div>
+          <div class="f-had">Hadir</div>
+          <div class="f-sak">Sakit</div>
+          <div class="f-izn">Izin</div>
+          <div class="f-alf">Alfa</div>
+        </div>
+        <div id="siswaRows"></div>
       </div>
       <div class="save-bar">
         <div id="saveMsg" class="success-msg" style="align-self:center;"></div>
@@ -96,16 +92,16 @@
     async function onAssignChange() {
       const idx = document.getElementById('selAssign').value;
       const panel = document.getElementById('panelNilai');
-      const tabel = document.getElementById('tabelNilai');
+      const list = document.getElementById('siswaList');
       const loading = document.getElementById('loadingSiswa');
-      const tbody = document.getElementById('tbodyNilai');
+      const rowsWrap = document.getElementById('siswaRows');
       document.getElementById('saveMsg').textContent = '';
 
       if (idx === '') { panel.style.display = 'none'; return; }
 
       const a = assignments[idx];
       panel.style.display = 'block';
-      tabel.style.display = 'none';
+      list.style.display = 'none';
       loading.style.display = 'block';
       document.getElementById('judulTabel').textContent = 'Nilai ' + a.kelas + ' - ' + a.mapel;
 
@@ -120,25 +116,29 @@
       siswaList = siswaRes.data;
       const existingNilai = nilaiRes.success ? nilaiRes.data : {};
 
-      tbody.innerHTML = '';
+      rowsWrap.innerHTML = '';
       siswaList.forEach(s => {
         const n = existingNilai[s.nis] || {};
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td data-label="NIS" class="col-nis">${s.nis}</td>
-          <td data-label="Nama" class="col-nama sticky">${s.nama}</td>
-          <td data-label="Pengetahuan"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="pengetahuan" value="${n.pengetahuan ?? ''}"></td>
-          <td data-label="Keterampilan"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="keterampilan" value="${n.keterampilan ?? ''}"></td>
-          <td data-label="Spiritual"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="spiritual" value="${n.spiritual ?? ''}"></td>
-          <td data-label="Sosial"><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="sosial" value="${n.sosial ?? ''}"></td>
-          <td data-label="Hadir"><input type="number" min="0" data-nis="${s.nis}" data-field="hadir" value="${n.hadir ?? ''}" style="width:55px;"></td>
-          <td data-label="Sakit"><input type="number" min="0" data-nis="${s.nis}" data-field="sakit" value="${n.sakit ?? ''}" style="width:55px;"></td>
-          <td data-label="Izin"><input type="number" min="0" data-nis="${s.nis}" data-field="izin" value="${n.izin ?? ''}" style="width:55px;"></td>
-          <td data-label="Alfa"><input type="number" min="0" data-nis="${s.nis}" data-field="alfa" value="${n.alfa ?? ''}" style="width:55px;"></td>
+        const inp = (field, label, val) =>
+          `<span class="mobile-label">${label}</span><input type="number" min="0" max="100" data-nis="${s.nis}" data-field="${field}" value="${val ?? ''}">`;
+
+        const row = document.createElement('div');
+        row.className = 'siswa-row';
+        row.innerHTML = `
+          <div class="f-nis">${s.nis}</div>
+          <div class="f-nama">${s.nama}</div>
+          <div class="f-peng">${inp('pengetahuan', 'Pengetahuan', n.pengetahuan)}</div>
+          <div class="f-ket">${inp('keterampilan', 'Keterampilan', n.keterampilan)}</div>
+          <div class="f-spi">${inp('spiritual', 'Spiritual', n.spiritual)}</div>
+          <div class="f-sos">${inp('sosial', 'Sosial', n.sosial)}</div>
+          <div class="f-had">${inp('hadir', 'Hadir', n.hadir)}</div>
+          <div class="f-sak">${inp('sakit', 'Sakit', n.sakit)}</div>
+          <div class="f-izn">${inp('izin', 'Izin', n.izin)}</div>
+          <div class="f-alf">${inp('alfa', 'Alfa', n.alfa)}</div>
         `;
-        tbody.appendChild(tr);
+        rowsWrap.appendChild(row);
       });
-      tabel.style.display = 'table';
+      list.style.display = 'block';
     }
 
     async function simpanNilai() {
