@@ -204,34 +204,38 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* ===== Grid Daftar Siswa (guru.html) ===== */
 .siswa-list {
+  display: table;
+  width: 100%;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
+  border-collapse: collapse;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
 .siswa-row {
-  display: grid;
-  grid-template-columns: 90px 1fr repeat(8, 85px);
-  align-items: center;
-  gap: 4px;
-  padding: 8px 10px;
-  border-bottom: 1px solid #e0e0e0;
-  font-size: 13px;
-  min-width: 760px; /* jaga supaya kolom tidak terlalu sempit saat di-scroll desktop */
+  display: table-row;
 }
 
-.siswa-row:last-child { border-bottom: none; }
+.siswa-row:last-child > div { border-bottom: none; }
 
 .siswa-row.header-row {
   background: #eef4f2;
   color: #1a3c34;
   font-weight: 600;
-  text-align: center;
-  min-width: 760px;
 }
 
-.siswa-row > div { text-align: center; }
+.siswa-row > div {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+  font-size: 13px;
+}
+
+#siswaRows { display: table-row-group; }
+
 .siswa-row .f-nama { text-align: left; white-space: nowrap; }
 
 .siswa-row input[type="number"] {
@@ -247,7 +251,7 @@ input[type="number"]::-webkit-outer-spin-button {
   position: sticky;
   background: #fff;
 }
-.siswa-row .f-nis { left: 0; }
+.siswa-row .f-nis { left: 0; width: 90px; }
 .siswa-row .f-nama { left: 90px; box-shadow: 2px 0 3px -2px rgba(0,0,0,0.15); }
 .siswa-row.header-row .f-nis,
 .siswa-row.header-row .f-nama { background: #eef4f2; }
@@ -255,6 +259,8 @@ input[type="number"]::-webkit-outer-spin-button {
 .mobile-label { display: none; }
 
 @media (max-width: 600px) {
+  .siswa-list { display: block; }
+  #siswaRows { display: block; }
   .siswa-row.header-row { display: none; }
 
   .siswa-row {
@@ -269,8 +275,10 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 10px;
   }
 
+  .siswa-row > div { display: block; }
+
   .siswa-row .f-nis { grid-area: nis; text-align: left; font-weight: 700; position: static; }
-  .siswa-row .f-nama { grid-area: nama; text-align: left; font-weight: 700; white-space: normal; position: static; box-shadow: none; }
+  .siswa-row .f-nama { grid-area: nama; text-align: left; font-weight: 700; white-space: normal; position: static; box-shadow: none; width: auto; }
   .f-peng { grid-area: peng; }
   .f-ket { grid-area: ket; }
   .f-spi { grid-area: spi; }
