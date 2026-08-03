@@ -4,7 +4,83 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - Aplikasi Penilaian</title>
-<link rel="stylesheet" href="style.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+    min-height: 100vh;
+  }
+
+  .center-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    padding: 32px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .card h1 {
+    font-size: 20px;
+    margin-bottom: 4px;
+    color: #1a3c34;
+  }
+
+  .card p.subtitle {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #444;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  button {
+    width: 100%;
+    padding: 11px;
+    background: #1a7a5e;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  button:hover { background: #145f49; }
+
+  .error-msg {
+    color: #c0392b;
+    font-size: 13px;
+    margin-bottom: 12px;
+    min-height: 16px;
+  }
+</style>
 </head>
 <body>
   <div class="center-wrap">

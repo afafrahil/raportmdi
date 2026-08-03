@@ -1,11 +1,339 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Guru - Input Nilai</title>
-<link rel="stylesheet" href="style.css?v=6">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Guru - Input Nilai</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #444;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 11px;
+      background: #1a7a5e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #145f49;
+    }
+
+    .success-msg {
+      color: #1a7a5e;
+      font-size: 13px;
+      margin-bottom: 12px;
+      min-height: 16px;
+    }
+
+    /* ===== Dashboard layout ===== */
+
+    .topbar {
+      background: #1a3c34;
+      color: #fff;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topbar h2 {
+      font-size: 16px;
+    }
+
+    .topbar .user-info {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .topbar button {
+      width: auto;
+      background: #c0392b;
+      padding: 6px 14px;
+      font-size: 13px;
+    }
+
+    .topbar button:hover {
+      background: #a93226;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .panel {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .panel h3 {
+      font-size: 15px;
+      margin-bottom: 14px;
+      color: #1a3c34;
+    }
+
+    /* Hilangkan tombol panah tambah/kurang pada input angka */
+    input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .save-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 14px;
+      gap: 10px;
+    }
+
+    .save-bar button {
+      width: auto;
+      padding: 10px 22px;
+    }
+
+    .loading {
+      color: #888;
+      font-size: 13px;
+      padding: 10px 0;
+    }
+
+    /* ===== Grid Daftar Siswa (guru.html) ===== */
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      width: 100%;
+    }
+
+    .siswa-list {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    .siswa-row {
+      display: table-row;
+    }
+
+    .siswa-row:last-child>div {
+      border-bottom: none;
+    }
+
+    .siswa-row.header-row {
+      background: #eef4f2;
+      color: #1a3c34;
+      font-weight: 600;
+    }
+
+    .siswa-row>div {
+      display: table-cell;
+      vertical-align: middle;
+      padding: 8px 10px;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    #siswaRows {
+      display: table-row-group;
+    }
+
+    .siswa-row .f-nama {
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .siswa-row input[type="number"] {
+      margin-bottom: 0;
+      width: 100%;
+      padding: 6px 4px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .siswa-row .f-nis {
+      width: 90px;
+    }
+
+    /* Lebar seragam untuk semua kolom nilai (desktop) */
+    .siswa-row .f-nilai {
+      width: 100px;
+      white-space: nowrap;
+    }
+
+    .mobile-label {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .table-scroll {
+        overflow-x: visible;
+        border: none;
+      }
+
+      .siswa-list {
+        display: block;
+        min-width: 0;
+      }
+
+      #siswaRows {
+        display: block;
+      }
+
+      .siswa-row.header-row {
+        display: none;
+      }
+
+      .siswa-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        column-gap: 4px;
+        grid-template-areas:
+          "nis nama nama nama"
+          "peng ket spi sos"
+          "had sak izn alf";
+        min-width: 0;
+        row-gap: 4px;
+        padding: 8px 4px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        background: #fff;
+      }
+
+      .siswa-row>div {
+        display: block;
+        width: auto;
+        /*white-space: normal;*/
+        padding: 2px 2px;
+        border-bottom: none;
+        /* Menghilangkan garis pembatas horizontal pada mobile */
+      }
+
+      .siswa-row .f-nis {
+        grid-area: nis;
+        text-align: left;
+        font-weight: 700;
+        position: static;
+      }
+
+      .siswa-row .f-nama {
+        grid-area: nama;
+        text-align: left;
+        font-weight: 700;
+        white-space: normal;
+        position: static;
+        box-shadow: none;
+        width: auto;
+      }
+
+      .f-peng {
+        grid-area: peng;
+      }
+
+      .f-ket {
+        grid-area: ket;
+      }
+
+      .f-spi {
+        grid-area: spi;
+      }
+
+      .f-sos {
+        grid-area: sos;
+      }
+
+      .f-had {
+        grid-area: had;
+      }
+
+      .f-sak {
+        grid-area: sak;
+      }
+
+      .f-izn {
+        grid-area: izn;
+      }
+
+      .f-alf {
+        grid-area: alf;
+      }
+
+      .mobile-label {
+        display: block;
+        font-size: 9px;
+        color: #044305;
+        margin-bottom: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+      }
+
+      .siswa-row input[type="number"] {
+        width: 46px;
+        padding: 4px 2px;
+        margin: 0 auto;
+        display: block;
+      }
+
+      .container {
+        padding: 0 8px;
+      }
+
+      .panel {
+        padding: 12px 10px;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <div class="topbar">
     <div>
@@ -21,28 +349,29 @@
   <div class="container">
     <div class="panel">
       <h3>Pilih Kelas & Mata Pelajaran</h3>
-      <label for="selAssign">Kelas - Mata Pelajaran yang Anda ampu</label>
       <select id="selAssign"></select>
       <div id="loadingAssign" class="loading" style="display:none;">Memuat data...</div>
     </div>
 
     <div class="panel" id="panelNilai" style="display:none;">
-      <h3 id="judulTabel">Daftar Siswa</h3>
+      <h3 id="judulTabel" style="display: none;">Daftar Siswa</h3>
       <div id="loadingSiswa" class="loading">Memuat siswa...</div>
-      <div class="siswa-list" id="siswaList" style="display:none;">
-        <div class="siswa-row header-row">
-          <div class="f-nis">NIS</div>
-          <div class="f-nama">Nama Siswa</div>
-          <div class="f-nilai f-peng">Pengetahuan</div>
-          <div class="f-nilai f-ket">Keterampilan</div>
-          <div class="f-nilai f-spi">Spiritual</div>
-          <div class="f-nilai f-sos">Sosial</div>
-          <div class="f-nilai f-had">Hadir</div>
-          <div class="f-nilai f-sak">Sakit</div>
-          <div class="f-nilai f-izn">Izin</div>
-          <div class="f-nilai f-alf">Alfa</div>
+      <div class="table-scroll" id="siswaList" style="display:none;">
+        <div class="siswa-list">
+          <div class="siswa-row header-row">
+            <div class="f-nis">NIS</div>
+            <div class="f-nama">Nama Siswa</div>
+            <div class="f-nilai f-peng">Pengetahuan</div>
+            <div class="f-nilai f-ket">Keterampilan</div>
+            <div class="f-nilai f-spi">Spiritual</div>
+            <div class="f-nilai f-sos">Sosial</div>
+            <div class="f-nilai f-had">Hadir</div>
+            <div class="f-nilai f-sak">Sakit</div>
+            <div class="f-nilai f-izn">Izin</div>
+            <div class="f-nilai f-alf">Alfa</div>
+          </div>
+          <div id="siswaRows"></div>
         </div>
-        <div id="siswaRows"></div>
       </div>
       <div class="save-bar">
         <div id="saveMsg" class="success-msg" style="align-self:center;"></div>
@@ -188,4 +517,5 @@
     init();
   </script>
 </body>
+
 </html>
