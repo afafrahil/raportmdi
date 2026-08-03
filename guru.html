@@ -66,6 +66,7 @@
         if (res.success) {
           document.getElementById('infoTahunSemester').textContent =
             res.tahunAjaran + ' ' + res.semester;
+          setFavicon(res.logoUrl);
         }
       });
 

@@ -37,11 +37,12 @@
         if (res.success) {
           document.getElementById('namaLembaga').textContent = res.namaLembaga;
           document.getElementById('infoTahunSemester').textContent =
-            'Tahun Ajaran ' + res.tahunAjaran + ' — Semester ' + res.semester;
+            res.tahunAjaran + ' ' + res.semester;
           if (res.logoUrl) {
             const img = document.getElementById('logoLembaga');
             img.src = res.logoUrl;
             img.style.display = 'block';
+            setFavicon(res.logoUrl);
           }
         }
       } catch (err) {

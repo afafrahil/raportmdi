@@ -2,7 +2,7 @@
 // GANTI URL INI dengan Web App URL hasil deploy Apps Script Anda
 // Contoh: https://script.google.com/macros/s/XXXXXXXXXXXX/exec
 // =======================================================
-const API_URL = "https://script.google.com/macros/s/AKfycbyZe228fNkfk7K1fvXGbbLxEsoSHgqXgze046OBKzMqkX0VLJUcJoDkMHlzsO2Yalbs/exec";
+const API_URL = "PASTE_URL_WEB_APP_ANDA_DISINI";
 
 async function apiCall(action, params = {}) {
   const payload = Object.assign({ action }, params);
@@ -13,6 +13,17 @@ async function apiCall(action, params = {}) {
     body: JSON.stringify(payload)
   });
   return res.json();
+}
+
+function setFavicon(url) {
+  if (!url) return;
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement('link');
+    link.rel = 'icon';
+    document.head.appendChild(link);
+  }
+  link.href = url;
 }
 
 function requireLogin(expectedRole) {
