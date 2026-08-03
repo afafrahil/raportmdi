@@ -2,7 +2,7 @@
 // GANTI URL INI dengan Web App URL hasil deploy Apps Script Anda
 // Contoh: https://script.google.com/macros/s/XXXXXXXXXXXX/exec
 // =======================================================
-const API_URL = "PASTE_URL_WEB_APP_ANDA_DISINI";
+const API_URL = "https://script.google.com/macros/s/AKfycbyZe228fNkfk7K1fvXGbbLxEsoSHgqXgze046OBKzMqkX0VLJUcJoDkMHlzsO2Yalbs/exec";
 
 async function apiCall(action, params = {}) {
   const payload = Object.assign({ action }, params);
