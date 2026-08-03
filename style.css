@@ -202,6 +202,92 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .loading { color: #888; font-size: 13px; padding: 10px 0; }
 
+/* ===== Grid Daftar Siswa (guru.html) ===== */
+.siswa-list {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.siswa-row {
+  display: grid;
+  grid-template-columns: 90px 1fr repeat(8, 85px);
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 13px;
+  min-width: 760px; /* jaga supaya kolom tidak terlalu sempit saat di-scroll desktop */
+}
+
+.siswa-row:last-child { border-bottom: none; }
+
+.siswa-row.header-row {
+  background: #eef4f2;
+  color: #1a3c34;
+  font-weight: 600;
+  text-align: center;
+  min-width: 760px;
+}
+
+.siswa-row > div { text-align: center; }
+.siswa-row .f-nama { text-align: left; white-space: nowrap; }
+
+.siswa-row input[type="number"] {
+  margin-bottom: 0;
+  width: 100%;
+  padding: 6px 4px;
+  text-align: center;
+}
+
+/* Sticky: NIS & Nama tetap terlihat saat scroll ke samping (desktop) */
+.siswa-row .f-nis,
+.siswa-row .f-nama {
+  position: sticky;
+  background: #fff;
+}
+.siswa-row .f-nis { left: 0; }
+.siswa-row .f-nama { left: 90px; box-shadow: 2px 0 3px -2px rgba(0,0,0,0.15); }
+.siswa-row.header-row .f-nis,
+.siswa-row.header-row .f-nama { background: #eef4f2; }
+
+.mobile-label { display: none; }
+
+@media (max-width: 600px) {
+  .siswa-row.header-row { display: none; }
+
+  .siswa-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+      "nis nama nama nama"
+      "peng ket spi sos"
+      "had sak izn alf";
+    min-width: 0;
+    row-gap: 8px;
+    padding: 10px;
+  }
+
+  .siswa-row .f-nis { grid-area: nis; text-align: left; font-weight: 700; position: static; }
+  .siswa-row .f-nama { grid-area: nama; text-align: left; font-weight: 700; white-space: normal; position: static; box-shadow: none; }
+  .f-peng { grid-area: peng; }
+  .f-ket { grid-area: ket; }
+  .f-spi { grid-area: spi; }
+  .f-sos { grid-area: sos; }
+  .f-had { grid-area: had; }
+  .f-sak { grid-area: sak; }
+  .f-izn { grid-area: izn; }
+  .f-alf { grid-area: alf; }
+
+  .mobile-label {
+    display: block;
+    font-size: 10px;
+    color: #666;
+    margin-bottom: 3px;
+  }
+}
+
 .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
