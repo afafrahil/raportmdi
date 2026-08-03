@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Guru - Input Nilai</title>
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
   <div class="topbar">
@@ -33,14 +33,14 @@
         <div class="siswa-row header-row">
           <div class="f-nis">NIS</div>
           <div class="f-nama">Nama Siswa</div>
-          <div class="f-peng">Pengetahuan</div>
-          <div class="f-ket">Keterampilan</div>
-          <div class="f-spi">Spiritual</div>
-          <div class="f-sos">Sosial</div>
-          <div class="f-had">Hadir</div>
-          <div class="f-sak">Sakit</div>
-          <div class="f-izn">Izin</div>
-          <div class="f-alf">Alfa</div>
+          <div class="f-nilai f-peng">Pengetahuan</div>
+          <div class="f-nilai f-ket">Keterampilan</div>
+          <div class="f-nilai f-spi">Spiritual</div>
+          <div class="f-nilai f-sos">Sosial</div>
+          <div class="f-nilai f-had">Hadir</div>
+          <div class="f-nilai f-sak">Sakit</div>
+          <div class="f-nilai f-izn">Izin</div>
+          <div class="f-nilai f-alf">Alfa</div>
         </div>
         <div id="siswaRows"></div>
       </div>
@@ -127,14 +127,14 @@
         row.innerHTML = `
           <div class="f-nis">${s.nis}</div>
           <div class="f-nama">${s.nama}</div>
-          <div class="f-peng">${inp('pengetahuan', 'Pengetahuan', n.pengetahuan)}</div>
-          <div class="f-ket">${inp('keterampilan', 'Keterampilan', n.keterampilan)}</div>
-          <div class="f-spi">${inp('spiritual', 'Spiritual', n.spiritual)}</div>
-          <div class="f-sos">${inp('sosial', 'Sosial', n.sosial)}</div>
-          <div class="f-had">${inp('hadir', 'Hadir', n.hadir)}</div>
-          <div class="f-sak">${inp('sakit', 'Sakit', n.sakit)}</div>
-          <div class="f-izn">${inp('izin', 'Izin', n.izin)}</div>
-          <div class="f-alf">${inp('alfa', 'Alfa', n.alfa)}</div>
+          <div class="f-nilai f-peng">${inp('pengetahuan', 'Pengetahuan', n.pengetahuan)}</div>
+          <div class="f-nilai f-ket">${inp('keterampilan', 'Keterampilan', n.keterampilan)}</div>
+          <div class="f-nilai f-spi">${inp('spiritual', 'Spiritual', n.spiritual)}</div>
+          <div class="f-nilai f-sos">${inp('sosial', 'Sosial', n.sosial)}</div>
+          <div class="f-nilai f-had">${inp('hadir', 'Hadir', n.hadir)}</div>
+          <div class="f-nilai f-sak">${inp('sakit', 'Sakit', n.sakit)}</div>
+          <div class="f-nilai f-izn">${inp('izin', 'Izin', n.izin)}</div>
+          <div class="f-nilai f-alf">${inp('alfa', 'Alfa', n.alfa)}</div>
         `;
         rowsWrap.appendChild(row);
       });
